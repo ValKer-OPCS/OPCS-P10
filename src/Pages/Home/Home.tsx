@@ -12,14 +12,14 @@ const Home = () => {
   return (
     <main>
      <Banner  src={bannerImg}
-            images={[
-              { src: bannerImg400, width: 400 },
-              { src: bannerImg800, width: 800 },
-              { src: bannerImg1200, width: 1200 },]}
-            sizes="(max-width: 400px) 400px,
+              images={[
+                { src: bannerImg400, width: 400 },
+                { src: bannerImg800, width: 800 },
+                { src: bannerImg1200, width: 1200 },]}
+              sizes="(max-width: 400px) 400px,
                   (max-width: 800px) 800px,
                   1200px"
-            alt="photo d'une plante dans un verre rempli de pièces de monnaie">
+              alt="Picture of a plant in a glass full of coins">
 
         <section className={styles["hero-content"]}>
 					<h2 className={styles["sr-only"]}>Promoted Content</h2>
