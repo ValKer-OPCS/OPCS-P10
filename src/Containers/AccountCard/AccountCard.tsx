@@ -1,4 +1,5 @@
 import styles from './style.module.css'
+import Button from '../../Components/Button/Button';
 
 type AccountCardProp = {
     title: string;
@@ -16,7 +17,8 @@ const AccountCard = ({ title, amount, description }: AccountCardProp) => {
 				<p className={styles["account-amount-description"]}>{description}</p>
 			</div>
 			<div className={styles["account-content-wrapper cta"]}>
-				<button className={styles["transaction-button"]}>View transactions</button>
+				<Button type="button" variant="transaction-button" text="View transactions"/>
+
 			</div>
 		</section>
   )
