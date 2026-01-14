@@ -5,16 +5,18 @@ type TextFieldType = {
     variant: "input-wrapper" | "secondary";
     text: string;
     type: "password" | "email" | "text";
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 
-const TextField = ({id, variant, text, type } : TextFieldType) => {
+const FormTextField = ({id, variant, text, type, value, onChange } : TextFieldType) => {
   return (
     <div className={styles[variant]}>
 		<label htmlFor={id}>{text}</label>
-	    <input type={type} id={id}  />
+	    <input type={type} id={id} value={value} onChange={onChange} />
 	</div>
   )
 };
 
-export default TextField
+export default FormTextField
