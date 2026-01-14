@@ -4,14 +4,16 @@ import App from './App.tsx';
 
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from 'react-redux';
-
-import userReducer  from './Stores/userStore.ts';
+import authReducer from './Redux/authSlice.ts'
+import userReducer from './Redux/userSlice.ts'
 
 const store = configureStore({
+  reducer: {
+    auth: authReducer,
+    user: userReducer,
+  },
+});
 
-  reducer: { user:userReducer },
-
-})
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -23,3 +25,7 @@ createRoot(document.getElementById('root')!).render(
 
   </StrictMode>,
 )
+
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
