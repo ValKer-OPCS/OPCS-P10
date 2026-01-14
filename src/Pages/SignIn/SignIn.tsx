@@ -1,7 +1,7 @@
 
 import styles from './style.module.scss'
 
-import Form from '../../Containers/Form/Form';
+import LoginForm from '../../Containers/LoginForm/LoginForm';
 
 
 const SignIn = () => {
@@ -11,7 +11,7 @@ const SignIn = () => {
 				<i className="fa fa-user-circle {styles[sign-in-icon]}"></i>
 				<h1>Sign In</h1>
 			
-			<Form/>
+			<LoginForm/>
 			</section>
 		</main>
   )
