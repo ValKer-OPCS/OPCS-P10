@@ -18,10 +18,11 @@ const LoginForm = () => {
 
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [rememberMe, setRememberMe] = useState(false)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(login({ email, password }))
+    dispatch(login({ email, password, rememberMe  }))
   }
 
   useEffect(() => {
@@ -38,7 +39,7 @@ const LoginForm = () => {
 
       <FormTextField id="password" variant="input-wrapper" text="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
 
-      <Checkbox id="remember-me" variant="input-remember" text="Remember me" />
+      <Checkbox id="remember-me" variant="input-remember" text="Remember me" checked={rememberMe} onChange={setRememberMe} />
 
       <Button type="submit" variant="sign-in-button" text={loading ? 'Loading...' : 'Sign In'} disabled={loading} />
     </form>
