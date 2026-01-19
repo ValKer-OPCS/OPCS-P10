@@ -15,7 +15,6 @@ const LoginForm = () => {
   const authLoading = useSelector((state: RootState) => state.auth.loading)
   const userLoading = useSelector((state: RootState) => state.user.loading)
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
-  const user = useSelector((state: RootState) => state.user.user)
 
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -26,10 +25,10 @@ const LoginForm = () => {
   }
 
   useEffect(() => {
-    if (isAuthenticated && user) {
+    if (isAuthenticated ) {
       navigate('/account', { replace: true })
     }
-  }, [isAuthenticated, user, navigate])
+  }, [isAuthenticated, navigate])
 
   const loading = authLoading || userLoading
 
