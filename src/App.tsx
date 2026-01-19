@@ -4,6 +4,7 @@ import Error from './Pages/Errors/Error'
 import SignIn from './Pages/SignIn/SignIn'
 import Account from './Pages/Account/Account'
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute'
+import UserAutoLoader from './Components/UserAutoLoader/UserAutoLoader'
 
 import Header from './Containers/Header/Header'
 import Footer from './Containers/Footer/Footer'
@@ -15,6 +16,8 @@ function App() {
 
 
   return (
+    <>
+    <UserAutoLoader/>
     <Router>
       <Header />
       <Routes>
@@ -27,6 +30,7 @@ function App() {
       </Routes>
       <Footer />
     </Router>
+    </>
   )
 }
 
