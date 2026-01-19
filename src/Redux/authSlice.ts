@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit'
-import { saveToken, loadToken, clearToken } from './authStorage'
+import { saveToken, loadToken, clearToken, saveTempToken , clearTempToken } from './authStorage'
 import { fetchUserProfile } from './userSlice'
 
 interface AuthState {
@@ -12,6 +12,7 @@ interface AuthState {
 interface LoginPayload {
   email: string
   password: string
+  rememberMe: boolean
 }
 
 
@@ -40,6 +41,8 @@ export const login = createAsyncThunk<string,LoginPayload,{ rejectValue: string 
 
     dispatch(fetchUserProfile(token))
 
+    if (credentials.rememberMe) saveToken(token)
+
     return data.body.token
   } catch {
     return rejectWithValue('Connexion error')
@@ -61,6 +64,7 @@ const authSlice = createSlice({
       state.token = null
       state.isAuthenticated = false
       clearToken()
+      clearTempToken()
     },
   },
   extraReducers: (builder) => {
@@ -75,7 +79,7 @@ const authSlice = createSlice({
           state.loading = false
           state.token = action.payload
           state.isAuthenticated = true
-          saveToken(action.payload)
+          saveTempToken(action.payload)
         }
       )
       .addCase(login.rejected, (state, action) => {
