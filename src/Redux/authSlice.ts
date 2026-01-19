@@ -17,8 +17,15 @@ interface LoginPayload {
 
 const persistedToken = loadToken()
 
+const delay = (ms: number) =>
+
+  new Promise((resolve) => setTimeout(resolve, ms))
+
 export const login = createAsyncThunk<string,LoginPayload,{ rejectValue: string }>('auth/login', 
     async (credentials, { rejectWithValue, dispatch }) => {
+
+      await delay(1000)
+
   try {
     const response = await fetch('http://localhost:3001/api/v1/user/login', {
       method: 'POST',
