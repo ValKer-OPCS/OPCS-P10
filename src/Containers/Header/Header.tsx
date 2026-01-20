@@ -14,7 +14,7 @@ const Header = () => {
 
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
   const { user } = useSelector((state: RootState) => state.user)
-  const firstName = user?.firstName
+  const userName = user?.userName
 
   const handlelogout = () => {
         
@@ -32,7 +32,7 @@ const Header = () => {
     <header className={styles["main-nav"]}>
       <Logo />
       <nav>
-        {!isAuthenticated || !firstName ? (
+        {!isAuthenticated || !userName ? (
           <NavLink className={styles["main-nav-item"]} to="/signIn">
             <i className="fa fa-user-circle"></i>
             &nbsp;Sign In
@@ -41,7 +41,7 @@ const Header = () => {
           <div className={styles["main-nav-user"]}>
             <NavLink to="/account" className={styles["main-nav-item"]}>
               <i className="fa fa-user-circle"></i>
-              &nbsp;{firstName}&nbsp;
+              &nbsp;{userName}&nbsp;
             </NavLink>
             
 
