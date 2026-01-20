@@ -13,3 +13,35 @@
   padding: 5px;
   font-size: 1.2rem;
 }
+
+
+.username-change{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1rem;
+  justify-content: center;
+  gap: 5px;
+}
+
+.username-change label {
+  font-weight: bold;
+  text-align: center;
+  line-height: 2.5em;
+}
+
+.username-change input {
+  padding: 5px;
+  font-size: 1.2rem;
+  width: 180px;
+}
+
+@media (max-width: 720px) {
+ 
+.username-change label {
+  line-height: 1em;
+}
+
+.username-change input {
+    width: clamp(15vw, 25vw, 50vw);
+}
+}
