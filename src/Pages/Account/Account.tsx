@@ -2,6 +2,9 @@ import AccountCard from "../../Containers/AccountCard/AccountCard";
 import Button from "../../Components/Button/Button";
 import styles from './style.module.scss'
 
+import { useSelector } from "react-redux";
+import type { RootState } from "../../main";
+
 
 type Account = {
   title: string;
@@ -28,10 +31,14 @@ const accounts: Account[] = [
 ];
 
 const Account = () => {
+
+  const { user } = useSelector((state: RootState) => state.user)
+  const fullName = user?.firstName + " " + user?.lastName + " !"
+
   return (
     <main className={styles["main"]}>
       <div className={styles["header"]}>
-        <h1>Welcome back<br />Tony Jarvis!</h1>
+        <h1>Welcome back<br />{fullName}</h1>
         <Button type="button" variant="edit-button" text="Edit Name" />
       </div>
       <h2 className={styles["sr-only"]}>Accounts</h2>

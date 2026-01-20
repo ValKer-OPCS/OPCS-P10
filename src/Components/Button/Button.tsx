@@ -4,12 +4,13 @@ type ButtonType = {
     type: "button" | "submit" | "reset";
     variant: "sign-in-button" | "edit-button" | "transaction-button";
     text: string;
+    disabled?: boolean
 };
 
 
-const Button = ({type, variant, text} : ButtonType) => {
+const Button = ({type, variant, text, disabled} : ButtonType) => {
   return (
-   <button type={type} className={styles[variant]}> {text} </button>
+   <button type={type} className={styles[variant]} disabled={disabled} > {text} </button>
   )
 };
 
