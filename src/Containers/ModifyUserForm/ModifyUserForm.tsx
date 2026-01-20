@@ -25,6 +25,10 @@ const ModifyUserForm = ({ onClose }: ModifyUserFormProps) => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if (!userName.trim()) {
+
+        return;
+    }
         dispatch(updateUsername({ userName }))
         onClose()
     }
@@ -51,7 +55,7 @@ const ModifyUserForm = ({ onClose }: ModifyUserFormProps) => {
             <FormTextField id="lastName" variant="username-change" text="Last name: " type="text" value={lastName} disabled={true} />
 
             <div className={styles.btnContainer} >
-                <Button type="submit" variant="edit-button" text={'Save'} disabled={false} />
+                <Button type="submit" variant="edit-button" text={'Save'} disabled={!userName.trim()} />
                 <Button type="button" variant="edit-button" text={'Cancel'} disabled={false} onClick={handleCancel}/>
             </div>
 
