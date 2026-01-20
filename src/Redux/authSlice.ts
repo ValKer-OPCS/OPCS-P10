@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit'
-import { saveToken, loadToken, clearToken, saveTempToken , clearTempToken } from './authStorage'
+import { saveToken, loadToken, clearToken, saveTempToken, clearTempToken } from './authStorage'
 import { fetchUserProfile } from './userSlice'
 
 interface AuthState {
@@ -18,36 +18,34 @@ interface LoginPayload {
 
 const persistedToken = loadToken()
 
-const delay = (ms: number) =>
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-  new Promise((resolve) => setTimeout(resolve, ms))
+export const login = createAsyncThunk<string, LoginPayload, { rejectValue: string }>('auth/login',
+  async (credentials, { rejectWithValue, dispatch }) => {
 
-export const login = createAsyncThunk<string,LoginPayload,{ rejectValue: string }>('auth/login', 
-    async (credentials, { rejectWithValue, dispatch }) => {
+    await delay(1000)
 
-      await delay(1000)
+    try {
+      const response = await fetch('http://localhost:3001/api/v1/user/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials),
+      })
 
-  try {
-    const response = await fetch('http://localhost:3001/api/v1/user/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials),
-    })
+      if (!response.ok) { throw new Error() }
 
-    if (!response.ok) { throw new Error()}
+      const data = await response.json()
+      const token = data.body.token
 
-    const data = await response.json()
-    const token = data.body.token
+      dispatch(fetchUserProfile(token))
 
-    dispatch(fetchUserProfile(token))
+      if (credentials.rememberMe) saveToken(token)
 
-    if (credentials.rememberMe) saveToken(token)
-
-    return data.body.token
-  } catch {
-    return rejectWithValue('Connexion error')
-  }
-})
+      return data.body.token
+    } catch {
+      return rejectWithValue('Connexion error')
+    }
+  })
 
 const initialState: AuthState = {
   token: persistedToken,
