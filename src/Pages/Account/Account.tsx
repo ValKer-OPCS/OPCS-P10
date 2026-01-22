@@ -1,9 +1,11 @@
 import AccountCard from "../../Containers/AccountCard/AccountCard";
 import Button from "../../Components/Button/Button";
+import ModifyUserForm from "../../Containers/ModifyUserForm/ModifyUserForm";
 import styles from './style.module.scss'
 
 import { useSelector } from "react-redux";
 import type { RootState } from "../../main";
+import { useState } from "react";
 
 
 type Account = {
@@ -35,12 +37,22 @@ const Account = () => {
   const { user } = useSelector((state: RootState) => state.user)
   const fullName = user?.firstName + " " + user?.lastName + " !"
 
+  const [visibleForm, setVisibleForm] = useState<boolean>(false)
+
+  const handleCloseForm = () => setVisibleForm(false)
+
   return (
     <main className={styles["main"]}>
       <div className={styles["header"]}>
-        <h1>Welcome back<br />{fullName}</h1>
-        <Button type="button" variant="edit-button" text="Edit Name" />
-      </div>
+  {!visibleForm && (
+    <>
+      <h1>Welcome back<br />{fullName}</h1>
+      <Button type="button" variant="edit-button" text="Edit Name" onClick={() => setVisibleForm(true)}/>
+    </>
+  )}
+
+  {visibleForm && <ModifyUserForm onClose={handleCloseForm} />}
+</div>
       <h2 className={styles["sr-only"]}>Accounts</h2>
 
 

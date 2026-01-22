@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit'
+import { updateUsername } from './updateUsernameSlice'
 
 
 interface User {
@@ -16,24 +17,24 @@ interface UserState {
 }
 
 
-export const fetchUserProfile = createAsyncThunk<User,string, { rejectValue: string }>('user/fetchUserProfile', 
-    async (token, { rejectWithValue }) => {
-  try {
-    const response = await fetch('http://localhost:3001/api/v1/user/profile', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
+export const fetchUserProfile = createAsyncThunk<User, string, { rejectValue: string }>('user/fetchUserProfile',
+  async (token, { rejectWithValue }) => {
+    try {
+      const response = await fetch('http://localhost:3001/api/v1/user/profile', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
 
-    if (!response.ok) throw new Error()
+      if (!response.ok) throw new Error()
 
-    const data = await response.json()
-    return data.body as User
-  } catch {
-    return rejectWithValue('Unable to fetch user profile')
-  }
-})
+      const data = await response.json()
+      return data.body as User
+    } catch {
+      return rejectWithValue('Unable to fetch user profile')
+    }
+  })
 
 const initialState: UserState = {
   user: null,
@@ -64,6 +65,9 @@ const userSlice = createSlice({
       .addCase(fetchUserProfile.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload ?? 'Unknown error occured'
+      })
+      .addCase(updateUsername.fulfilled, (state, action) => {
+        if (state.user) state.user.userName = action.payload.userName
       })
   },
 })

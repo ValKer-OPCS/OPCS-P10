@@ -1,0 +1,68 @@
+import styles from './style.module.scss'
+
+import { useDispatch, useSelector } from "react-redux";
+import { useState, type FormEvent, useEffect } from "react";
+import type { AppDispatch, RootState } from "../../main";
+import { updateUsername } from '../../Redux/updateUsernameSlice';
+
+
+import FormTextField from '../../Components/FormTextField/FormTextField';
+import Button from '../../Components/Button/Button';
+
+type ModifyUserFormProps = {
+  onClose: () => void
+}
+
+const ModifyUserForm = ({ onClose }: ModifyUserFormProps) => {
+    
+    const dispatch = useDispatch<AppDispatch>()
+
+    const { user } = useSelector((state: RootState) => state.user)
+    const userNameDefault = user?.userName 
+    const firstName = user?.firstName ?? ''
+    const lastName = user?.lastName ?? ''
+
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        if (!userName.trim()) {
+
+        return;
+    }
+        dispatch(updateUsername({ userName }))
+        onClose()
+    }
+
+    const handleCancel = () => {
+        setUserName(userNameDefault ?? '')
+        onClose()
+    }
+
+    const [userName, setUserName] = useState<string>('')
+
+    useEffect(() => {
+    if (user?.userName) {
+        setUserName(user.userName)
+    }
+}, [user])
+
+    return (
+        <form className={styles.formContainer} onSubmit={handleSubmit}>
+            <h1>Edit user info</h1>
+
+            <FormTextField id="userName" variant="username-change" text="User name: " type="text" value={userName} onChange={(e) => setUserName(e.target.value)} />
+            <FormTextField id="firstName" variant="username-change" text="First name: " type="text" value={firstName} disabled={true} />
+            <FormTextField id="lastName" variant="username-change" text="Last name: " type="text" value={lastName} disabled={true} />
+
+            <div className={styles.btnContainer} >
+                <Button type="submit" variant="edit-button" text={'Save'} disabled={!userName.trim()} />
+                <Button type="button" variant="edit-button" text={'Cancel'} disabled={false} onClick={handleCancel}/>
+            </div>
+
+
+
+        </form>
+    )
+};
+
+export default ModifyUserForm
