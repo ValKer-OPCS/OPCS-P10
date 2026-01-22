@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from "react-redux"
 import { fetchUserProfile } from "../../Redux/userSlice"
 import type { RootState, AppDispatch } from "../../main"
 
-export default function AppInitializer() {
+
+const UserAutoLoader = () => {
   const dispatch = useDispatch<AppDispatch>()
-  
+
   const { token } = useSelector((state: RootState) => state.auth)
   const { user } = useSelector((state: RootState) => state.user)
 
@@ -17,3 +18,5 @@ export default function AppInitializer() {
 
   return null
 }
+
+export default UserAutoLoader
