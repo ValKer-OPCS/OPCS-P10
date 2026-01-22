@@ -3,7 +3,7 @@ import styles from './style.module.scss'
 import { useDispatch, useSelector } from "react-redux";
 import { useState, type FormEvent, useEffect } from "react";
 import type { AppDispatch, RootState } from "../../main";
-import { updateUsername } from '../../Redux/modifyUserSlice';
+import { updateUsername } from '../../Redux/updateUsernameSlice';
 
 
 import FormTextField from '../../Components/FormTextField/FormTextField';

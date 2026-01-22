@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit'
-import { updateUsername } from './modifyUserSlice'
+import { updateUsername } from './updateUsernameSlice'
 
 
 interface User {
