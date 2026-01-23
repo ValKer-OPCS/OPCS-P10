@@ -20,6 +20,7 @@ interface UpdateUsernameThunkAPI {
 export const updateUsername = createAsyncThunk<UpdateUsernameResponse, UpdateUsernamePayload, UpdateUsernameThunkAPI>('user/updateUsername',
   async ({ userName }, { getState, rejectWithValue }) => {
     const token = getState().auth.token
+    const trimmedUserName = userName.trim()
 
     if (!token) {
       return rejectWithValue('Not authenticated')
@@ -34,17 +35,23 @@ export const updateUsername = createAsyncThunk<UpdateUsernameResponse, UpdateUse
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ userName }),
+          body: JSON.stringify({ userName: trimmedUserName }),
         }
       )
 
-      if (!response.ok) throw new Error()
-
       const data = await response.json()
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          return rejectWithValue('Session expired. Please sign in again.')
+        }
+        return rejectWithValue('Unable to update username')
+      }
+      
 
       return { userName: data.body.userName }
     } catch {
-      return rejectWithValue('Unable to update username')
+      return rejectWithValue('Network error. Please try again.')
     }
   }
 )
