@@ -22,15 +22,18 @@ const ModifyUserForm = ({ onClose }: ModifyUserFormProps) => {
     const firstName = user?.firstName ?? ''
     const lastName = user?.lastName ?? ''
 
+     const { loading, error } = useSelector((state: RootState) => state.modifyUser)
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (!userName.trim()) {
+        if (!userName.trim()) return;
 
-        return;
-    }
-        dispatch(updateUsername({ userName }))
-        onClose()
+        const resultAction = await dispatch(updateUsername({ userName }))
+
+        if (updateUsername.fulfilled.match(resultAction)) {
+            onClose()
+        }
     }
 
     const handleCancel = () => {
@@ -54,10 +57,13 @@ const ModifyUserForm = ({ onClose }: ModifyUserFormProps) => {
             <FormTextField id="firstName" variant="username-change" text="First name: " type="text" value={firstName} disabled={true} />
             <FormTextField id="lastName" variant="username-change" text="Last name: " type="text" value={lastName} disabled={true} />
 
+            
+
             <div className={styles.btnContainer} >
-                <Button type="submit" variant="edit-button" text={'Save'} disabled={!userName.trim()} />
-                <Button type="button" variant="edit-button" text={'Cancel'} disabled={false} onClick={handleCancel}/>
+                <Button type="submit" variant="edit-button" text={'Save'} disabled={!userName.trim() || loading} />
+                <Button type="button" variant="edit-button" text={'Cancel'} disabled={loading} onClick={handleCancel}/>
             </div>
+            {error && <p className={styles.formError}>{error}</p>}
 
 
 
