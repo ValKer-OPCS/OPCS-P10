@@ -5,7 +5,9 @@ export const saveToken = (token: string): void => {
 }
 
 export const loadToken = (): string | null => {
-  return localStorage.getItem(KEY)
+  return (
+    sessionStorage.getItem(KEY) ?? localStorage.getItem(KEY)
+  )
 }
 
 export const clearToken = (): void => {
@@ -17,9 +19,6 @@ export const saveTempToken = (token: string): void => {
   sessionStorage.setItem(KEY, token)
 }
 
-export const loadTempToken = (): string | null => {
-  return sessionStorage.getItem(KEY)
-}
 
 export const clearTempToken = (): void => {
   sessionStorage.removeItem(KEY)
