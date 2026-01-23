@@ -32,20 +32,32 @@ export const login = createAsyncThunk<string, LoginPayload, { rejectValue: strin
         body: JSON.stringify(credentials),
       })
 
-      if (!response.ok) { throw new Error() }
 
       const data = await response.json()
+
+      if (!response.ok) {
+        if (
+          data?.message === 'Error: User not found!' ||
+          data?.message === 'Error: Password is invalid'
+        ) {
+          return rejectWithValue('Username and/or password incorrect')
+        }
+
+        return rejectWithValue(data?.message)
+      }
+
       const token = data.body.token
 
       dispatch(fetchUserProfile(token))
 
       if (credentials.rememberMe) saveToken(token)
 
-      return data.body.token
+      return token
     } catch {
-      return rejectWithValue('Connexion error')
+      return rejectWithValue('Network error, try again later')
     }
-  })
+  }
+)
 
 const initialState: AuthState = {
   token: persistedToken,
