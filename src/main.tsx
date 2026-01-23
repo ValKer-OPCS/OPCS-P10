@@ -6,11 +6,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from 'react-redux';
 import authReducer from './Redux/authSlice.ts'
 import userReducer from './Redux/userSlice.ts'
+import modifyUserReducer from './Redux/updateUsernameSlice.ts'
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     user: userReducer,
+    modifyUser: modifyUserReducer,
   },
 });
 
