@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit'
 import { updateUsername } from './updateUsernameSlice'
+import { logout } from './authSlice';
 
 
 interface User {
@@ -18,7 +19,8 @@ interface UserState {
 
 
 export const fetchUserProfile = createAsyncThunk<User, string, { rejectValue: string }>('user/fetchUserProfile',
-  async (token, { rejectWithValue }) => {
+  async (token, { rejectWithValue, dispatch }) => {
+
     try {
       const response = await fetch('http://localhost:3001/api/v1/user/profile', {
         headers: {
@@ -26,6 +28,12 @@ export const fetchUserProfile = createAsyncThunk<User, string, { rejectValue: st
           'Content-Type': 'application/json',
         },
       })
+
+        if (response.status === 401) {
+        dispatch(logout())
+        window.location.href = '/signin'
+        return rejectWithValue('Session expired')
+      }
 
       if (!response.ok) throw new Error()
 
