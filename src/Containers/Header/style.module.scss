@@ -28,7 +28,16 @@
   text-decoration: underline;
 }
 
-.main-nav-user{
+.main-nav-user {
   display: flex;
-  
+  flex-direction: row;
+
+}
+
+@media (max-width: 600px) {
+  .main-nav-user {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
 }
