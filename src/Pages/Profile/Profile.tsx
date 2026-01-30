@@ -35,7 +35,6 @@ const accounts: Account[] = [
 const Profile = () => {
 
   const { user } = useSelector((state: RootState) => state.user)
-  const fullName = user?.firstName + " " + user?.lastName + " !"
 
   const [visibleForm, setVisibleForm] = useState<boolean>(false)
 
@@ -46,7 +45,7 @@ const Profile = () => {
       <div className={styles["header"]}>
   {!visibleForm && (
     <>
-      <h1>Welcome back<br />{fullName}</h1>
+      <h1> Welcome back <br /> {user?.firstName && user?.lastName && `${user.firstName} ${user.lastName} !`} </h1>
       <Button type="button" variant="edit-button" text="Edit Name" onClick={() => setVisibleForm(true)}/>
     </>
   )}
