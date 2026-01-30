@@ -26,6 +26,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/profile" element={<Profile />} />
         </Route>   
+        <Route path="error/:code" element={<Error />} />
         <Route path="*" element={<Error />} />
       </Routes>
       <Footer />
