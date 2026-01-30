@@ -26,7 +26,7 @@ const LoginForm = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(login({ email, password, rememberMe }))
+    dispatch(login({ email, password, rememberMe, navigate}))
   }
 
   useEffect(() => {

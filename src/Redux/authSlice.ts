@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit'
 import { saveToken, loadToken, clearToken, saveTempToken, clearTempToken } from './authStorage'
 import { fetchUserProfile } from './userSlice'
+import type { NavigateFunction } from 'react-router-dom'
+import { errorHandler } from '../Helper/errorHandler'
 
 interface AuthState {
   token: string | null
@@ -13,6 +15,7 @@ interface LoginPayload {
   email: string
   password: string
   rememberMe: boolean
+  navigate: NavigateFunction
 }
 
 
@@ -42,18 +45,22 @@ export const login = createAsyncThunk<string, LoginPayload, { rejectValue: strin
         ) {
           return rejectWithValue('Username and/or password incorrect')
         }
+        const statusCode = response.status 
+        errorHandler(credentials.navigate, dispatch, statusCode)
 
         return rejectWithValue(data?.message)
       }
 
       const token = data.body.token
 
-      dispatch(fetchUserProfile(token))
+      await dispatch(fetchUserProfile({ token, navigate: credentials.navigate }));
 
       if (credentials.rememberMe) saveToken(token)
 
       return token
-    } catch {
+    } catch  {
+      errorHandler(credentials.navigate, dispatch, 500)
+      
       return rejectWithValue('Network error, try again later')
     }
   }

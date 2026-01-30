@@ -17,8 +17,9 @@ function App() {
 
   return (
     <>
-    <UserAutoLoader/>
+    
     <Router>
+      <UserAutoLoader/>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />

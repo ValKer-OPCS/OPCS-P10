@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, type FormEvent, useEffect } from "react";
 import type { AppDispatch, RootState } from "../../main";
 import { updateUsername } from '../../Redux/updateUsernameSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 import FormTextField from '../../Components/FormTextField/FormTextField';
@@ -16,6 +17,7 @@ type ModifyUserFormProps = {
 const ModifyUserForm = ({ onClose }: ModifyUserFormProps) => {
     
     const dispatch = useDispatch<AppDispatch>()
+    const navigate = useNavigate();
 
     const { user } = useSelector((state: RootState) => state.user)
     const userNameDefault = user?.userName 
@@ -29,7 +31,7 @@ const ModifyUserForm = ({ onClose }: ModifyUserFormProps) => {
         e.preventDefault()
         if (!userName.trim() || userName.length > 20) return;
 
-        const resultAction = await dispatch(updateUsername({ userName }))
+        const resultAction = await dispatch(updateUsername({ userName, navigate }));
 
         if (updateUsername.fulfilled.match(resultAction)) {
             onClose()
