@@ -27,7 +27,7 @@ const ModifyUserForm = ({ onClose }: ModifyUserFormProps) => {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (!userName.trim()) return;
+        if (!userName.trim() || userName.length > 20) return;
 
         const resultAction = await dispatch(updateUsername({ userName }))
 
@@ -42,6 +42,7 @@ const ModifyUserForm = ({ onClose }: ModifyUserFormProps) => {
     }
 
     const [userName, setUserName] = useState<string>('')
+    
 
     useEffect(() => {
     if (user?.userName) {
@@ -53,7 +54,7 @@ const ModifyUserForm = ({ onClose }: ModifyUserFormProps) => {
         <form className={styles.formContainer} onSubmit={handleSubmit}>
             <h1>Edit user info</h1>
 
-            <FormTextField id="userName" variant="username-change" text="User name: " type="text" value={userName} onChange={(e) => setUserName(e.target.value)} />
+            <FormTextField id="userName" variant="username-change" text="User name: " type="text" value={userName} onChange={(e) => setUserName(e.target.value)} maxLength={20} />
             <FormTextField id="firstName" variant="username-change" text="First name: " type="text" value={firstName} disabled={true} />
             <FormTextField id="lastName" variant="username-change" text="Last name: " type="text" value={lastName} disabled={true} />
 
