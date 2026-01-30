@@ -31,7 +31,7 @@ export const fetchUserProfile = createAsyncThunk<User, string, { rejectValue: st
 
         if (response.status === 401) {
         dispatch(logout())
-        window.location.href = '/signin'
+        window.location.href = '/login'
         return rejectWithValue('Session expired')
       }
 

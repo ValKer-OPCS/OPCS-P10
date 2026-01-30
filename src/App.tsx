@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from './Pages/Home/Home'
 import Error from './Pages/Errors/Error'
-import SignIn from './Pages/SignIn/SignIn'
-import Account from './Pages/Account/Account'
+import Login from './Pages/Login/Login'
+import Profile from './Pages/Profile/Profile'
 import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute'
 import UserAutoLoader from './Components/UserAutoLoader/UserAutoLoader'
 
@@ -22,9 +22,9 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/signin" element={<SignIn />} />  
+        <Route path="/login" element={<Login />} />  
         <Route element={<ProtectedRoute />}>
-          <Route path="/account" element={<Account />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>   
         <Route path="*" element={<Error />} />
       </Routes>

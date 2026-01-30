@@ -32,7 +32,7 @@ const accounts: Account[] = [
   },
 ];
 
-const Account = () => {
+const Profile = () => {
 
   const { user } = useSelector((state: RootState) => state.user)
   const fullName = user?.firstName + " " + user?.lastName + " !"
@@ -65,4 +65,4 @@ const Account = () => {
   )
 };
 
-export default Account
+export default Profile

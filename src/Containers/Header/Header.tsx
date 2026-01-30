@@ -33,13 +33,13 @@ const Header = () => {
       <Logo />
       <nav>
         {!isAuthenticated || !userName ? (
-          <NavLink className={styles["main-nav-item"]} to="/signIn">
+          <NavLink className={styles["main-nav-item"]} to="/login">
             <i className="fa fa-user-circle"></i>
             &nbsp;Sign In
           </NavLink>
         ) : (
           <div className={styles["main-nav-user"]}>
-            <NavLink to="/account" className={styles["main-nav-item"]}>
+            <NavLink to="/login" className={styles["main-nav-item"]}>
               <i className="fa fa-user-circle"></i>
               &nbsp;{userName}&nbsp;
             </NavLink>

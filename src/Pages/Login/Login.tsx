@@ -4,7 +4,7 @@ import styles from './style.module.scss'
 import LoginForm from '../../Containers/LoginForm/LoginForm';
 
 
-const SignIn = () => {
+const Login = () => {
   return (
     <main className={styles["main"]}>
 			<section className={styles["sign-in-content"]}>
@@ -17,4 +17,4 @@ const SignIn = () => {
   )
 };
 
-export default SignIn
+export default Login

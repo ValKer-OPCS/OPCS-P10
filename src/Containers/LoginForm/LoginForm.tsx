@@ -31,7 +31,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/account', { replace: true })
+      navigate('/profile', { replace: true })
     }
   }, [isAuthenticated, navigate])
 
