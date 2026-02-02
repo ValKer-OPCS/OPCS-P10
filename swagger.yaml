@@ -1,0 +1,561 @@
+swagger: "2.0"
+info:
+  title: Bank Argent API documentation - PHASE 2
+  description: Contains all available API endpoints in this codebase and proposed API endpoints for transactions
+  version: "2.0.0"
+  termsOfService: "http://swagger.io/terms/"
+host: localhost:3001
+basePath: /api/v2
+schemes:
+  - http
+paths:
+  /user/login:
+    post:
+      tags:
+        - User Module
+      summary: Login
+      description: API for Login
+      parameters:
+        - in: body
+          name: body
+          description: Login Payload
+          required: true
+          schema:
+            $ref: "#/definitions/Login"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Login Successfully
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+  /user/signup:
+    post:
+      tags:
+        - User Module
+      summary: Signup
+      description: API for Signup
+      parameters:
+        - in: body
+          name: body
+          description: Signup Payload
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Signup Successfully
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+  /user/profile:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Profile API
+      description: API for fetching a user profile
+      #produces:
+      # - application/json
+      responses:
+        "200":
+          description: User profile retrieved successully
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Profile API
+      description: API for updating a user profile
+      parameters:
+        - in: body
+          name: body
+          description: Update user profile attributes
+          required: true
+          schema:
+            $ref: "#/definitions/UserProfile"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: User profile retrieved successully
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+  /users/{userId}/accounts:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: User Account API
+      description: Fetch all bank accounts associated with the authenticated user
+      parameters:
+        - in: query
+          name: page
+          type: integer
+          required: false
+          default: 1
+          description: Page number for pagination
+        - in: query
+          name: limit
+          type: integer
+          required: false
+          default: 10
+          description: Number of accounts per page
+        - in: query
+          name: favorite
+          type: boolean
+          default: 0
+          description: Used to load favorited account only
+      responses:
+        "200":
+          description: user's bank accounts successfully fetched
+          schema:
+            $ref: "#/definitions/PaginatedUserAccountsResponse"
+        "400":
+          description: Bad request
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Ressource not found
+        "429":
+          description: Too many requests
+        "500":
+          description: Internal Server Error
+        "503":
+          description: Service unavailable
+  /categories:
+    get:
+      tags:
+        - Transactions Module
+      summary: List predefined transaction categories
+      description: Retrieve all predefined categories available for transactions
+      security:
+        - Bearer: []
+      responses:
+        "200":
+          description: Categories retrieved successfully
+          schema:
+            $ref: "#/definitions/TransactionCategoriesResponse"
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal Server Error
+  /accounts/{accountID}/transactions:
+    get:
+      tags:
+        - Transactions Module
+      summary: List account transactions
+      description: Retrieve paginated and filtered transactions for a bank account
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: accountID
+          required: true
+          type: string
+          description: Account identifier
+
+        - in: query
+          name: page
+          type: integer
+          default: 1
+          description: Page number
+
+        - in: query
+          name: limit
+          type: integer
+          default: 10
+          description: Number of transactions per page
+
+        - in: query
+          name: fromDate
+          type: string
+          format: date
+          description: Start date filter
+
+        - in: query
+          name: toDate
+          type: string
+          format: date
+          description: End date filter
+
+        - in: query
+          name: category
+          type: string
+          description: Filter by category
+
+      responses:
+        "200":
+          description: Transactions retrieved successfully
+          schema:
+            $ref: "#/definitions/PaginatedTransactionsResponse"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Account not found
+        "500":
+          description: Internal Server Error
+  /transactions/{transactionID}:
+    patch:
+      tags:
+        - Transactions Module
+      summary: Update transaction category
+      description: Update mutable fields of a transaction (category)
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: transactionID
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionUpdate"
+      responses:
+        "200":
+          description: Transaction updated successfully
+          schema:
+            $ref: "#/definitions/Transaction"
+        "400":
+          description: Bad Request   
+        "401":
+          description: Unauthorized
+        "404":
+          description: Transaction not found
+        "500":
+          description: Internal Server Error
+  /transactions/{transactionID}/notes:
+    post:
+      tags:
+        - Transactions Module
+      summary: Create transaction note
+      description: Add a note to a transaction
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: transactionID
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionNote"
+      responses:
+        "201":
+          description: Note created successfully
+          schema:
+            $ref: "#/definitions/TransactionNoteResponse"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Transaction not found
+        "500":
+          description: Internal Server Error
+  /transactions/{transactionID}/notes/{noteID}:
+    patch:
+      tags:
+        - Transactions Module
+      summary: Update transaction note
+      description: Modify an existing transaction note
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: transactionID
+          required: true
+          type: string
+        - in: path
+          name: noteID
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionNote"
+      responses:
+        "200":
+          description: Note updated successfully
+          schema:
+            $ref: "#/definitions/TransactionNoteResponse"
+        "401":
+          description: Unauthorized
+        "404":
+          description: Note not found
+        "500":
+          description: Internal Server Error
+
+    delete:
+      tags:
+        - Transactions Module
+      summary: Delete transaction note
+      description: Remove a note from a transaction
+      security:
+        - Bearer: []
+      parameters:
+        - in: path
+          name: transactionID
+          required: true
+          type: string
+        - in: path
+          name: noteID
+          required: true
+          type: string
+      responses:
+        "204":
+          description: Note deleted successfully
+        "401":
+          description: Unauthorized
+        "404":
+          description: Note not found
+        "500":
+          description: Internal Server Error 
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  User:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
+      firstName:
+        type: string
+        description: user first name
+      lastName:
+        type: string
+        description: user last name
+      userName:
+        type: string
+        description: user public name
+  Login:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
+  ApiResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          id:
+            type: string
+          email:
+            type: string
+  LoginResponse:
+    type: object
+    properties:
+      token:
+        type: string
+  UserProfile:
+    type: object
+    properties:
+      userName:
+        type: string
+  PaginatedUserAccountsResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      message:
+        type: string
+        example: User bank accounts successfully fetched
+      page:
+        type: integer
+        example: 1
+        description: Current page number
+      totalPages:
+        type: integer
+        example: 3
+        description: Total number of pages available
+      totalAccounts:
+        type: integer
+        example: 25
+        description: Total number of accounts
+      body:
+        type: array
+        minItems: 1
+        maxItems: 25
+        items:
+          $ref: "#/definitions/Account"
+  Account:
+    type: object
+    properties:
+      id:
+        type: string
+        example: E1D555F9887
+      title:
+        type: string
+        example: Argent Bank Checking (x8349)
+      balance:
+        type: string
+        example: "-2082.79"
+        description: Account balance
+      currency:
+        type: string
+        example: "USD"
+        description: Account currency (USD, EUR, CAD, ...)
+      type:
+        type: string
+        example: Checking
+        description: Account type (checking, saving, credit card, joint)
+      status:
+        type: string
+        example: overdraft
+        description: Account status (overdraft, frozen, active)
+      favorite:
+        type : boolean
+        example : true
+        description : Used to fetch and display favorited account first
+  TransactionCategoriesResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      message:
+        type: string
+        example: Transaction categories retrieved successfully
+      body:
+        type: array
+        items:
+          $ref: "#/definitions/TransactionCategoryItem"
+  TransactionCategoryItem:
+    type: object
+    properties:
+      id:
+        type: string
+        example: groceries
+      label:
+        type: string
+        example: Groceries
+      description:
+        type: string
+        example: Food and supermarket expenses
+      icon:
+        type: string
+        example: cart
+      color:
+        type: string
+        example: "#4CAF50"
+      order:
+        type: integer
+        example: 1
+      active:
+        type: boolean
+        example: true
+  PaginatedTransactionsResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      message:
+        type: string
+        example: Transactions retrieved successfully
+      page:
+        type: integer
+      totalPages:
+        type: integer
+      totalTransactions:
+        type: integer
+      body:
+        type: array
+        items:
+          $ref: "#/definitions/Transaction"
+  Transaction:
+    type: object
+    properties:
+      transactionID:
+        type: string
+      transactionType:
+        type: string
+        enum: [debit, credit]
+      date:
+        type: string
+        format: date-time
+      description:
+        type: string
+      amount:
+        type: number
+        format: double
+      balance:
+        type: number
+        format: double
+      category:
+        type: string
+      notes:
+        type: array
+        items:
+          $ref: "#/definitions/TransactionNoteResponse"
+  TransactionUpdate:
+    type: object
+    required:
+    - category
+    properties:
+      category:
+        type: string
+        description: Category identifier. Must match an existing predefined transaction category id.
+  TransactionNote:
+    type: object
+    properties:
+      note:
+        type: string
+        minLength: 1
+        maxLength: 500
+  TransactionNoteResponse:
+    type: object
+    properties:
+      noteID:
+        type: string
+      note:
+        type: string
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
