@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit'
-import { saveToken, loadToken, clearToken, saveTempToken, clearTempToken } from './authStorage'
+import { saveToken, loadToken, clearToken, saveTempToken, clearTempToken } from '../Helper/storageHandler'
 import { fetchUserProfile } from './userSlice'
 import type { NavigateFunction } from 'react-router-dom'
 import { errorHandler } from '../Helper/errorHandler'
