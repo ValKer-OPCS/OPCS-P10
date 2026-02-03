@@ -152,8 +152,6 @@ paths:
         - Transactions Module
       summary: List predefined transaction categories
       description: Retrieve all predefined categories available for transactions
-      security:
-        - Bearer: []
       responses:
         "200":
           description: Categories retrieved successfully
@@ -212,6 +210,8 @@ paths:
           description: Transactions retrieved successfully
           schema:
             $ref: "#/definitions/PaginatedTransactionsResponse"
+        "400":
+          description: Bad request
         "401":
           description: Unauthorized
         "403":
@@ -274,6 +274,8 @@ paths:
           description: Note created successfully
           schema:
             $ref: "#/definitions/TransactionNoteResponse"
+        "400":
+          description: Bad request
         "401":
           description: Unauthorized
         "404":
@@ -307,6 +309,8 @@ paths:
           description: Note updated successfully
           schema:
             $ref: "#/definitions/TransactionNoteResponse"
+        "400":
+          description: Bad request            
         "401":
           description: Unauthorized
         "404":
@@ -333,6 +337,8 @@ paths:
       responses:
         "204":
           description: Note deleted successfully
+        "400":
+          description: Bad request          
         "401":
           description: Unauthorized
         "404":
@@ -481,9 +487,6 @@ definitions:
       color:
         type: string
         example: "#4CAF50"
-      order:
-        type: integer
-        example: 1
       active:
         type: boolean
         example: true
