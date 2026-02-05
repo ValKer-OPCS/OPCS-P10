@@ -15,6 +15,13 @@ const Error = () => {
   let errorConfig: ErrorConfig
 
   switch (code) {
+    case '400':
+      errorConfig = {
+        title: 'ERROR 400',
+        message: 'Your request is invalid.',
+        icon: 'error',
+      }
+      break
     case '401':
       errorConfig = {
         title: 'ERROR 401',
