@@ -101,7 +101,7 @@ const Icon = ({ name }: IconProps) => {
             break;
         case "error":
             icon = (
-                <svg width="auto" height="auto" xmlns="http://www.w3.org/2000/svg">
+                <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
                     <g transform="translate(5.00000,95.000000) scale(0.0500000,-0.0500000)" fill="#ffffff">
                     <path d="M1175 1321l146-146c13-13 13-33 0-46l-233-233 233-233c13-13 13-33
                     0-46l-146-146c-13-13-33-13-46 0L896 704 663 471c-13-13-33-13-46 0L471
