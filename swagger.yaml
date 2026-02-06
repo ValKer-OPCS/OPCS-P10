@@ -31,6 +31,8 @@ paths:
             $ref: "#/definitions/LoginResponse"
         "400":
           description: Invalid Fields
+        "429":
+          description: Too many requests          
         "500":
           description: Internal Server Error
   /user/signup:
@@ -55,6 +57,8 @@ paths:
             $ref: "#/definitions/ApiResponse"
         "400":
           description: Invalid Fields
+        "429":
+          description: Too many requests          
         "500":
           description: Internal Server Error
   /user/profile:
@@ -74,6 +78,8 @@ paths:
             $ref: "#/definitions/ApiResponse"
         "400":
           description: Invalid Fields
+        "429":
+          description: Too many requests          
         "500":
           description: Internal Server Error
     put:
@@ -106,7 +112,7 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Transactions Module
+        - Account Module
       summary: User Account API
       description: Fetch all bank accounts associated with the authenticated user
       parameters:
@@ -159,14 +165,16 @@ paths:
             $ref: "#/definitions/TransactionCategoriesResponse"
         "401":
           description: Unauthorized
+        "429":
+          description: Too many requests          
         "500":
-          description: Internal Server Error
+          description: Internal Server Error    
   /accounts/{accountID}/transactions:
     get:
       tags:
         - Transactions Module
       summary: List account transactions
-      description: Retrieve paginated and filtered transactions for a bank account
+      description: Retrieve paginated and filtered transactions list for a bank account
       security:
         - Bearer: []
       parameters:
@@ -200,11 +208,6 @@ paths:
           format: date
           description: End date filter
 
-        - in: query
-          name: category
-          type: string
-          description: Filter by category
-
       responses:
         "200":
           description: Transactions retrieved successfully
@@ -218,14 +221,16 @@ paths:
           description: Forbidden
         "404":
           description: Account not found
+        "429":
+          description: Too many requests          
         "500":
           description: Internal Server Error
   /transactions/{transactionID}:
-    patch:
+    get:
       tags:
         - Transactions Module
-      summary: Update transaction category
-      description: Update mutable fields of a transaction (category)
+      summary: Get transaction details
+      description: Retrieve full details of a single transaction
       security:
         - Bearer: []
       parameters:
@@ -233,118 +238,64 @@ paths:
           name: transactionID
           required: true
           type: string
-        - in: body
-          name: body
-          required: true
+          description: Transaction identifier
+      responses:
+        "200":
+          description: Transaction details retrieved successfully
           schema:
-            $ref: "#/definitions/TransactionUpdate"
+            $ref: "#/definitions/Transaction"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Transaction not found
+        "429":
+          description: Too many requests          
+        "500":
+          description: Internal Server Error
+    patch:
+      tags:
+        - Transactions Module
+      summary: Patch transaction
+      description: Update mutable fields of a transaction (category and/or note)
+      security:
+        - Bearer: []
+      parameters:
+      - in: path
+        name: transactionID
+        required: true
+        type: string
+        description: Transaction identifier
+
+      - in: query
+        name: field
+        required: true
+        type: string
+        enum: [category, note]
+        description: Field to update
+
+      - in: body
+        name: body
+        required: true
+        schema:
+          $ref: "#/definitions/TransactionFieldPatch"
       responses:
         "200":
           description: Transaction updated successfully
           schema:
             $ref: "#/definitions/Transaction"
         "400":
-          description: Bad Request   
-        "401":
-          description: Unauthorized
-        "404":
-          description: Transaction not found
-        "500":
-          description: Internal Server Error
-  /transactions/{transactionID}/notes:
-    post:
-      tags:
-        - Transactions Module
-      summary: Create transaction note
-      description: Add a note to a transaction
-      security:
-        - Bearer: []
-      parameters:
-        - in: path
-          name: transactionID
-          required: true
-          type: string
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: "#/definitions/TransactionNote"
-      responses:
-        "201":
-          description: Note created successfully
-          schema:
-            $ref: "#/definitions/TransactionNoteResponse"
-        "400":
           description: Bad request
         "401":
           description: Unauthorized
         "404":
           description: Transaction not found
+        "429":
+          description: Too many requests
         "500":
           description: Internal Server Error
-  /transactions/{transactionID}/notes/{noteID}:
-    patch:
-      tags:
-        - Transactions Module
-      summary: Update transaction note
-      description: Modify an existing transaction note
-      security:
-        - Bearer: []
-      parameters:
-        - in: path
-          name: transactionID
-          required: true
-          type: string
-        - in: path
-          name: noteID
-          required: true
-          type: string
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: "#/definitions/TransactionNote"
-      responses:
-        "200":
-          description: Note updated successfully
-          schema:
-            $ref: "#/definitions/TransactionNoteResponse"
-        "400":
-          description: Bad request            
-        "401":
-          description: Unauthorized
-        "404":
-          description: Note not found
-        "500":
-          description: Internal Server Error
-
-    delete:
-      tags:
-        - Transactions Module
-      summary: Delete transaction note
-      description: Remove a note from a transaction
-      security:
-        - Bearer: []
-      parameters:
-        - in: path
-          name: transactionID
-          required: true
-          type: string
-        - in: path
-          name: noteID
-          required: true
-          type: string
-      responses:
-        "204":
-          description: Note deleted successfully
-        "400":
-          description: Bad request          
-        "401":
-          description: Unauthorized
-        "404":
-          description: Note not found
-        "500":
-          description: Internal Server Error 
+  
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -501,64 +452,69 @@ definitions:
         example: Transactions retrieved successfully
       page:
         type: integer
+        example: 1
       totalPages:
         type: integer
+        example: 5
       totalTransactions:
         type: integer
+        example: 42
       body:
         type: array
         items:
-          $ref: "#/definitions/Transaction"
+          $ref: "#/definitions/TransactionSummary"
+
+  TransactionSummary:
+    type: object
+    properties:
+      transactionID:
+        type: string
+        example: TRX_987654
+      date:
+        type: string
+        format: date-time
+      amount:
+        type: number
+        format: double
+        example: -54.23
+      balance:
+        type: number
+        format: double
+        example: 298.01
+  TransactionFieldPatch:
+    type: object
+    required:
+      - value
+    properties:
+      value:
+        type: string
+        description: New value for the selected field
+        minLength: 1
+        maxLength: 500
+    additionalProperties: false
   Transaction:
     type: object
     properties:
       transactionID:
         type: string
+        example: TRX_987654
       transactionType:
         type: string
         enum: [debit, credit]
       date:
         type: string
         format: date-time
-      description:
-        type: string
       amount:
         type: number
         format: double
+        example: -90.58
       balance:
         type: number
         format: double
+        example: 1248.56
       category:
         type: string
+        example: transportation
       notes:
-        type: array
-        items:
-          $ref: "#/definitions/TransactionNoteResponse"
-  TransactionUpdate:
-    type: object
-    required:
-    - category
-    properties:
-      category:
         type: string
-        description: Category identifier. Must match an existing predefined transaction category id.
-  TransactionNote:
-    type: object
-    properties:
-      note:
-        type: string
-        minLength: 1
-        maxLength: 500
-  TransactionNoteResponse:
-    type: object
-    properties:
-      noteID:
-        type: string
-      note:
-        type: string
-      createdAt:
-        type: string
-        format: date-time
-      updatedAt:
-        type: string
-        format: date-time
+        example: Uber to airport
