@@ -2,6 +2,7 @@ import AccountCard from "../../Containers/AccountCard/AccountCard";
 import Button from "../../Components/Button/Button";
 import ModifyUserForm from "../../Containers/ModifyUserForm/ModifyUserForm";
 import styles from './style.module.scss'
+import Loader from '../../Components/Loader/Loader'
 
 import { useSelector } from "react-redux";
 import type { RootState } from "../../main";
@@ -43,20 +44,23 @@ const Profile = () => {
   return (
     <main className={styles["main"]}>
       <div className={styles["header"]}>
-  {!visibleForm && (
+  
+  {!user && <Loader/ >}
+
+  {user && !visibleForm && (
     <>
       <h1> Welcome back <br /> {user?.firstName && user?.lastName && `${user.firstName} ${user.lastName} !`} </h1>
       <Button type="button" variant="edit-button" text="Edit Name" onClick={() => setVisibleForm(true)}/>
     </>
   )}
 
-  {visibleForm && <ModifyUserForm onClose={handleCloseForm} />}
+  {user && visibleForm && <ModifyUserForm onClose={handleCloseForm} />}
 </div>
       <h2 className={styles["sr-only"]}>Accounts</h2>
 
 
 
-    {accounts.map((account) => (
+    {user && accounts.map((account) => (
       <AccountCard key={account.title} title={account.title} amount={account.amount} description={account.description}/>
     ))}
 
