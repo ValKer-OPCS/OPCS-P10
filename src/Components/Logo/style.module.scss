@@ -5,13 +5,9 @@
 }
 
 .main-nav-logo-image {
-  max-width: 100%;
-  width: 200px;
+  max-width: 200px;
 }
 
-.main-nav-logo-image-mini {
-    display: none;
-  }
 
 .sr-only {
   border: 0 !important;
@@ -28,16 +24,4 @@
   width: 1px !important;
   white-space: nowrap !important;
   /* 3 */
-}
-
-@media (max-width: 459px) {
-  .main-nav-logo-image {
-    display: none
-  }
-
-  .main-nav-logo-image-mini {
-    display: block;
-    max-width: 100%;
-  
-  }
 }
