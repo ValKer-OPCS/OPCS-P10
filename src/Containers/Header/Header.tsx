@@ -3,6 +3,8 @@ import { NavLink, useNavigate  } from "react-router-dom";
 import type { AppDispatch, RootState } from "../../main";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../Redux/authSlice";
+import logoImg from '../../Assets/argentBankLogo.webp'
+import logoImgMini from '../../assets/argentBankLogomini.webp'
 
 
 import styles from './style.module.scss'
@@ -30,7 +32,7 @@ const Header = () => {
 
   return (
     <header className={styles["main-nav"]}>
-      <Logo />
+      <Logo fullSize={logoImg} miniSize={logoImgMini} />
       <nav>
         {!isAuthenticated || !userName ? (
           <NavLink className={styles["main-nav-item"]} to="/login">
