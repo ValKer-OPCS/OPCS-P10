@@ -40,7 +40,7 @@ const LoginForm = () => {
   return (
     <>
     <form onSubmit={handleSubmit}>
-      <FormTextField id="username" variant="input-wrapper" text="Username" type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <FormTextField id="username" variant="input-wrapper" text="Username" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
 
       <FormTextField id="password" variant="input-wrapper" text="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
