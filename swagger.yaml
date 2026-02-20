@@ -163,8 +163,6 @@ paths:
           description: Categories retrieved successfully
           schema:
             $ref: "#/definitions/TransactionCategoriesResponse"
-        "401":
-          description: Unauthorized
         "429":
           description: Too many requests          
         "500":
